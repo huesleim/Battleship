@@ -42,23 +42,28 @@ main {
 .board {
     background-color: grey;
     display: grid;
-    grid-template-columns: repeat(10, 30px);
-    grid-template-rows: repeat(10, 30px);
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
     gap: 2px;
     aspect-ratio: 1 / 1;
+    width: 300px;
 }
 
+
+.cell.ship {
+    background-color: green;
+}
 .cell {
-    background-color: lightblue;
+    background-color: blue;
 }
 
-.attacked {
+.cell.attacked-hit {
     background-color: lightcoral;
 }
 
+.cell.attacked-miss {
+    background-color: lightgray;
+}
 .cell:hover {
     transform: scale(1.1);
-}
-.cell.ship {
-    background-color: lightblue;
 }

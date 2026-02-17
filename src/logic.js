@@ -117,7 +117,6 @@ const createBoard = () => {
                     : [x + ship.length - 1, y];
 
                 const result = placeShip(ship, bow, stern);
-
                 if (result.ok) placed = true;
             }
         });
@@ -157,12 +156,11 @@ const createGame = () => {
 
     const attack = (x, y) => {
         const result = opponent.board.receiveAttack(x, y);
-
-        if (!result.ok) return result;
-
         if (gameOver) {
             return { ok: false, reason: "game_over" };
         }
+        if (!result.ok) return result;
+
         if (checkLost(opponent)) {
             gameOver = true;
             return {
