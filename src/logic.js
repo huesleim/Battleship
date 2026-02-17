@@ -103,27 +103,34 @@ const createBoard = () => {
     };
 
     const randomlyPlaceAllShips = () => {
-    ships.forEach((ship) => {
-        let placed = false;
+        ships.forEach((ship) => {
+            let placed = false;
 
-        while (!placed) {
-            const x = Math.floor(Math.random() * 10);
-            const y = Math.floor(Math.random() * 10);
-            const horizontal = Math.random() < 0.5;
+            while (!placed) {
+                const x = Math.floor(Math.random() * 10);
+                const y = Math.floor(Math.random() * 10);
+                const horizontal = Math.random() < 0.5;
 
-            const bow = [x, y];
-            const stern = horizontal
-                ? [x, y + ship.length - 1]
-                : [x + ship.length - 1, y];
+                const bow = [x, y];
+                const stern = horizontal
+                    ? [x, y + ship.length - 1]
+                    : [x + ship.length - 1, y];
 
-            const result = placeShip(ship, bow, stern);
+                const result = placeShip(ship, bow, stern);
 
-            if (result.ok) placed = true;
-        }
-    });
-};
+                if (result.ok) placed = true;
+            }
+        });
+    };
 
-    return { gameBoard, ships, receiveAttack, placeShip, allShipsSunk, randomlyPlaceAllShips };
+    return {
+        gameBoard,
+        ships,
+        receiveAttack,
+        placeShip,
+        allShipsSunk,
+        randomlyPlaceAllShips,
+    };
 };
 
 const checkLost = (player) => {
@@ -136,12 +143,13 @@ const newPlayer = (name) => {
 };
 
 const createGame = () => {
-    player1.board.randomlyPlaceAllShips();
-    player2.board.randomlyPlaceAllShips();
     const player1 = newPlayer("Player 1");
     const player2 = newPlayer("Player 2");
     let currentPlayer = player1;
     let opponent = player2;
+    let gameOver = false;
+    player1.board.randomlyPlaceAllShips();
+    player2.board.randomlyPlaceAllShips();
 
     const switchTurn = () => {
         [currentPlayer, opponent] = [opponent, currentPlayer];
@@ -152,7 +160,11 @@ const createGame = () => {
 
         if (!result.ok) return result;
 
-        if checkLost(opponent) {
+        if (gameOver) {
+            return { ok: false, reason: "game_over" };
+        }
+        if (checkLost(opponent)) {
+            gameOver = true;
             return {
                 ok: true,
                 hit: result.hit,
@@ -170,14 +182,14 @@ const createGame = () => {
         };
     };
 
-    return { player1, player2, opponent, attack, switchTurn };
+    return {
+        player1,
+        player2,
+        attack,
+        switchTurn,
+        getCurrentPlayer: () => currentPlayer,
+        getOpponent: () => opponent,
+    };
 };
 
-
-export {
-    createShip,
-    checkLost,
-    createBoard,
-    newPlayer,
-    createGame,
-};
+export { createShip, checkLost, createBoard, newPlayer, createGame };
