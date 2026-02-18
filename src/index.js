@@ -11,6 +11,24 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
+newgameBtn.addEventListener("click", () => {
+    clearWinner();
+    game = logic.createGame();
+
+    placingShips = true;
+    currentShipIndex = 0;
+
+    game.player1.board.gameBoard.forEach((row) =>
+        row.forEach((cell) => {
+            cell.ship = null;
+            cell.attacked = false;
+        }),
+    );
+
+    populateBoard(playerBoard, game.player1.board);
+    populateBoard(opponentBoard, game.player2.board);
+});
+
 let game;
 let winnerElement = null;
 let placingShips = true;
@@ -31,24 +49,6 @@ const showWinner = (winner) => {
     winnerElement.textContent = `${winner} wins!`;
     document.body.appendChild(winnerElement);
 };
-
-newgameBtn.addEventListener("click", () => {
-    clearWinner();
-    game = logic.createGame();
-
-    placingShips = true;
-    currentShipIndex = 0;
-
-    game.player1.board.gameBoard.forEach((row) =>
-        row.forEach((cell) => {
-            cell.ship = null;
-            cell.attacked = false;
-        }),
-    );
-
-    populateBoard(playerBoard, game.player1.board);
-    populateBoard(opponentBoard, game.player2.board);
-});
 
 const populateBoard = (boardElement, boardModel) => {
     boardElement.innerHTML = "";
