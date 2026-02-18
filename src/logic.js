@@ -143,14 +143,9 @@ const newPlayer = (name) => {
 const createGame = () => {
     const player1 = newPlayer("Player 1");
     const player2 = newPlayer("Player 2");
-    let currentPlayer = player1;
-    let opponent = player2;
     let gameOver = false;
     player2.board.randomlyPlaceAllShips();
 
-    const switchTurn = () => {
-        [currentPlayer, opponent] = [opponent, currentPlayer];
-    };
 
     const attack = (x, y) => {
         if (gameOver) {
