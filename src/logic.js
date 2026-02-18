@@ -78,7 +78,6 @@ const createBoard = () => {
             return { ok: false, reason: "invalid_length" };
         }
 
-        // Validation pass
         for (let i = 0; i < length; i++) {
             const x = x1 + (dx === 0 ? 0 : dx > 0 ? i : -i);
             const y = y1 + (dy === 0 ? 0 : dy > 0 ? i : -i);
@@ -147,7 +146,6 @@ const createGame = () => {
     let currentPlayer = player1;
     let opponent = player2;
     let gameOver = false;
-    player1.board.randomlyPlaceAllShips();
     player2.board.randomlyPlaceAllShips();
 
     const switchTurn = () => {
@@ -171,7 +169,34 @@ const createGame = () => {
             };
         }
 
-        switchTurn();
+        return {
+            ok: true,
+            hit: result.hit,
+            gameOver: false,
+        };
+    };
+
+    const computerAttack = () => {
+        if (gameOver) return { ok: false };
+
+        let result;
+        let x, y;
+
+        do {
+            x = Math.floor(Math.random() * 10);
+            y = Math.floor(Math.random() * 10);
+            result = player1.board.receiveAttack(x, y);
+        } while (!result.ok);
+
+        if (checkLost(player1)) {
+            gameOver = true;
+            return {
+                ok: true,
+                hit: result.hit,
+                gameOver: true,
+                winner: player2.name,
+            };
+        }
 
         return {
             ok: true,
@@ -187,6 +212,7 @@ const createGame = () => {
         switchTurn,
         getCurrentPlayer: () => currentPlayer,
         getOpponent: () => opponent,
+        computerAttack,
     };
 };
 
