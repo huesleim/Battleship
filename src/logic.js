@@ -153,19 +153,20 @@ const createGame = () => {
     };
 
     const attack = (x, y) => {
-        const result = opponent.board.receiveAttack(x, y);
         if (gameOver) {
             return { ok: false, reason: "game_over" };
         }
+
+        const result = player2.board.receiveAttack(x, y);
         if (!result.ok) return result;
 
-        if (checkLost(opponent)) {
+        if (checkLost(player2)) {
             gameOver = true;
             return {
                 ok: true,
                 hit: result.hit,
                 gameOver: true,
-                winner: currentPlayer.name,
+                winner: player1.name,
             };
         }
 
