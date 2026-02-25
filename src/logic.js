@@ -205,8 +205,6 @@ const createGame = () => {
         player1,
         player2,
         attack,
-        getCurrentPlayer: () => currentPlayer,
-        getOpponent: () => opponent,
         computerAttack,
     };
 };
